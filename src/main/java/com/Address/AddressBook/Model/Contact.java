@@ -3,7 +3,11 @@ package com.Address.AddressBook.Model;
 
 
 import jakarta.persistence.*;
-
+import lombok.*;
+@Getter
+@Setter
+//@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "contacts")
 public class Contact {
@@ -15,15 +19,15 @@ public class Contact {
     private String name;
     private String email;
     private String phone;
-    private String address;
+//    private String address;
 
     public Contact() {}
 
-    public Contact(Long id, String email, String phone, String address) {
+    public Contact(Long id, String email, String phone) {
         this.id = id;
         this.email = email;
         this.phone = phone;
-        this.address = address;
+//        this.address = address;
     }
 
     public Long getId() { return id; }
@@ -38,6 +42,6 @@ public class Contact {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+//    public String getAddress() { return address; }
+//    public void setAddress(String address) { this.address = address; }
 }
