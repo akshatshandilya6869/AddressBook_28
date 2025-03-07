@@ -19,8 +19,8 @@ public class Contact {
 
     public Contact() {}
 
-    public Contact(String name, String email, String phone, String address) {
-        this.name = name;
+    public Contact(Long id, String email, String phone, String address) {
+        this.id = id;
         this.email = email;
         this.phone = phone;
         this.address = address;
