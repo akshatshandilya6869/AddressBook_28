@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequestMapping("/contacts")
 public class ContactController {
 
-    private final ContactRepository contactRepository;
+    ContactRepository contactRepository;
 
     public ContactController(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
