@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import com.Address.AddressBook.Exceptions.AddressBookException;
 @Service
 public class ContactService {
 
@@ -21,36 +21,63 @@ public class ContactService {
     }
 
     public List<ContactDTO> getAllContacts() {
-        return contactRepository.findAll()
-                .stream()
-                .map(contactMapper::toDTO)
-                .collect(Collectors.toList());
+        try {
+            return contactRepository.findAll()
+                    .stream()
+                    .map(contactMapper::toDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new AddressBookException("An error occurred while fetching contacts: " + e.getMessage());
+        }
     }
 
-    public Optional<ContactDTO> getContactById(Long id) {
-        return contactRepository.findById(id).map(contactMapper::toDTO);
+    public ContactDTO getContactById(Long id) {
+        try {
+            Optional<Contact> contact = contactRepository.findById(id);
+            if (contact.isEmpty()) {
+                throw new AddressBookException("Contact with ID: " + id + " not found");
+            }
+            return contactMapper.toDTO(contact.get());
+        } catch (Exception e) {
+            throw new AddressBookException("Error retrieving contact with ID " + id + ": " + e.getMessage());
+        }
     }
 
     public ContactDTO addContact(ContactDTO contactDTO) {
-        Contact contact = contactMapper.toEntity(contactDTO);
-        return contactMapper.toDTO(contactRepository.save(contact));
+        try {
+            Contact contact = contactMapper.toEntity(contactDTO);
+            return contactMapper.toDTO(contactRepository.save(contact));
+        } catch (Exception e) {
+            throw new AddressBookException("Error adding new contact: " + e.getMessage());
+        }
     }
 
-    public Optional<ContactDTO> updateContact(Long id, ContactDTO contactDTO) {
-        return contactRepository.findById(id)
-                .map(existingContact -> {
-                    existingContact.setName(contactDTO.getName());
-                    existingContact.setEmail(contactDTO.getEmail());
-                    existingContact.setPhone(contactDTO.getPhone());
-                    return contactMapper.toDTO(contactRepository.save(existingContact));
-                });
+    public ContactDTO updateContact(Long id, ContactDTO contactDTO) {
+        try {
+            Optional<Contact> existingContact = contactRepository.findById(id);
+            if (existingContact.isEmpty()) {
+                throw new AddressBookException("Contact with ID: " + id + " not found for update");
+            }
+            existingContact.get().setName(contactDTO.getName());
+            existingContact.get().setEmail(contactDTO.getEmail());
+            existingContact.get().setPhone(contactDTO.getPhone());
+
+            return contactMapper.toDTO(contactRepository.save(existingContact.get()));
+        } catch (Exception e) {
+            throw new AddressBookException("Error updating contact with ID " + id + ": " + e.getMessage());
+        }
     }
 
     public boolean deleteContact(Long id) {
-        if (contactRepository.existsById(id)) {
-            contactRepository.deleteById(id);
-            return true;
+        try {
+            if (contactRepository.existsById(id)) {
+                contactRepository.deleteById(id);
+                return true;
+            } else {
+                throw new AddressBookException("Contact with ID: " + id + " not found for deletion");
+            }
+        } catch (Exception e) {
+            throw new AddressBookException("Error deleting contact with ID " + id + ": " + e.getMessage());
         }
-        return false;
     }
 }
