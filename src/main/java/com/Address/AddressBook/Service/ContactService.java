@@ -1,7 +1,5 @@
 package com.Address.AddressBook.Service;
 
-//package com.example.AdressBook.Service;
-
 import com.Address.AddressBook.DTO.ContactDTO;
 import com.Address.AddressBook.Model.Contact;
 import com.Address.AddressBook.Repository.ContactRepository;
@@ -14,8 +12,8 @@ import java.util.stream.Collectors;
 @Service
 public class ContactService {
 
-    private final ContactRepository contactRepository;
-    private final ContactMapper contactMapper;
+    ContactRepository contactRepository;
+    ContactMapper contactMapper;
 
     public ContactService(ContactRepository contactRepository, ContactMapper contactMapper) {
         this.contactRepository = contactRepository;
@@ -43,7 +41,7 @@ public class ContactService {
                 .map(existingContact -> {
                     existingContact.setName(contactDTO.getName());
                     existingContact.setEmail(contactDTO.getEmail());
-                    existingContact.setPhone(contactDTO.getPhone()); // ✅ Fix: Update Phone Number
+                    existingContact.setPhone(contactDTO.getPhone());
                     return contactMapper.toDTO(contactRepository.save(existingContact));
                 });
     }
