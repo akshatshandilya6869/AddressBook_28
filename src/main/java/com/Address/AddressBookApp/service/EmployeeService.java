@@ -2,9 +2,6 @@ package com.Address.AddressBookApp.service;
 
 import com.Address.AddressBookApp.dto.EmployeeDTO;
 import com.Address.AddressBookApp.dto.ResponseDTO;
-import com.Address.AddressBookApp.entity.EmployeeEntity;
-import com.Address.AddressBookApp.interfaces.EmployeeInterface;
-import com.Address.AddressBookApp.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
